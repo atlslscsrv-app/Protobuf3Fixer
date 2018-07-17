@@ -17,7 +17,7 @@ module Protobuf3Fixer
       self.field_info = {}
       self.field_names = Set.new
 
-      self.instance = self.klass.new
+      self.instance = klass.new
       klass.descriptor.each(&method(:reflect_on_field))
     end
 

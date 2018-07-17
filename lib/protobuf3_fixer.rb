@@ -16,7 +16,6 @@ module Protobuf3Fixer
 
     def decode_json(klass, json)
       parsed_json = JSON.parse(json)
-      binding.pry
       cleaned_obj = clean_data_for_klass(klass, parsed_json)
       klass.decode_json(cleaned_obj.to_json)
     end
