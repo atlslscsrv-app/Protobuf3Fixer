@@ -21,7 +21,7 @@ module Protobuf3Fixer
     end
 
     def clean_data_for_klass(klass, data)
-      return unless data
+      return data unless data.is_a?(Hash)
       reflector = reflect_on(klass)
 
       # Remove unknown fields
