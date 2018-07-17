@@ -1,6 +1,6 @@
 # Protobuf3Fixer
 
-This gem is a thin wrapper to make fix some of the non-conformance of the ruby
+This gem is a thin wrapper to fix some of the non-conformance of the ruby
 protobuff plugin
 
 ## Usage
