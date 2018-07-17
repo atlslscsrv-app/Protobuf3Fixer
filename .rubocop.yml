@@ -1,0 +1,42 @@
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  EnforcedStyle: always
+
+Style/TrailingCommaInHashLiteral:
+  Enabled: true
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInArrayLiteral:
+  Enabled: true
+  EnforcedStyleForMultiline: comma
+
+Layout/EndAlignment:
+  Enabled: true
+
+Lint/UnusedMethodArgument:
+  AllowUnusedKeywordArguments: true
+
+Metrics/LineLength:
+  Enabled: true
+  IgnoredPatterns: ['\A#']
+  Max: 120
+
+Layout/AlignParameters:
+  Enabled: true
+
+Naming/UncommunicativeMethodParamName:
+  Enabled: true
+  AllowedNames: ['io', 'id', 'to', 'by', 'on', 'in', 'at', '_'] # Defaults + _
+
+Layout/MultilineMethodCallIndentation:
+  Enabled: true
+
+ParallelAssignment:
+  Enabled: true
+
+Metrics/MethodLength:
+  Enabled: true
+  Max: 30
