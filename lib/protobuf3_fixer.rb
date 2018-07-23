@@ -25,27 +25,52 @@ module Protobuf3Fixer
       reflector = reflect_on(klass)
 
       # Remove unknown fields
-      known_fields = data.select do |k, _|
-        reflector.field_names.include?(k)
-      end
+      known_fields = prune_and_organize_fields(reflector, data)
 
-      known_fields.each do |k, v|
-        subklass = reflector.subklass_for(k)
-        next unless subklass
-        case reflector.field_type(k)
-        when Protobuf3Fixer::Reflector::TYPE_ARRAY
-          known_fields[k] = v.collect do |sub_object|
-            clean_data_for_klass(subklass, sub_object)
+      final_data = {}
+
+      known_fields.each do |(json_field, ruby_field), v|
+        subklass = reflector.subklass_for(ruby_field)
+
+        if subklass
+          case reflector.field_type(ruby_field)
+          when Protobuf3Fixer::Reflector::TYPE_ARRAY
+            final_data[json_field] = v.collect do |sub_object|
+              clean_data_for_klass(subklass, sub_object)
+            end
+          when Protobuf3Fixer::Reflector::TYPE_MAP
+            final_data[json_field] = v.each_with_object({}) do |(map_key, sub_object), new_hash|
+              new_hash[map_key] = clean_data_for_klass(subklass, sub_object)
+              new_hash
+            end
+          when Protobuf3Fixer::Reflector::TYPE_SUB_OBJECT
+            final_data[json_field] = clean_data_for_klass(subklass, v) if v
           end
-        when Protobuf3Fixer::Reflector::TYPE_MAP
-          known_fields[k] = v.each_with_object({}) do |(map_key, sub_object), new_hash|
-            new_hash[map_key] = clean_data_for_klass(subklass, sub_object)
-            new_hash
-          end
-        when Protobuf3Fixer::Reflector::TYPE_SUB_OBJECT
-          known_fields[k] = clean_data_for_klass(subklass, v) if v
+        else
+          final_data[json_field] = v
         end
       end
+
+      final_data
+    end
+
+    def prune_and_organize_fields(reflector, data)
+      data.each_with_object({}) do |(k, v), fields|
+        json_field_name = k
+        local_field_name = if reflector.field_names.include?(rubyized_field_name(k))
+                             rubyized_field_name(k)
+                           elsif reflector.field_names.include?(k)
+                             k
+                           end
+
+        next unless local_field_name
+
+        fields[[json_field_name, local_field_name]] = v
+      end
+    end
+
+    def rubyized_field_name(field_name)
+      field_name.gsub(/([a-z\d])([A-Z])/, '\1_\2').tap(&:downcase!)
     end
   end
 end

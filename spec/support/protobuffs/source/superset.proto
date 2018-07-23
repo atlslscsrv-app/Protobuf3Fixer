@@ -13,7 +13,7 @@ message SuperSubField1 {
 
 message Subset {
   string field1 = 1;
-  repeated SubField1 arrField = 2;
+  repeated SubField1 arr_field = 2;
   map<string, SubField1> mapField = 3;
   SubField1 subMsg = 4;
 
@@ -24,7 +24,7 @@ message Subset {
 
 message Superset {
   string field1 = 1;
-  repeated SuperSubField1 arrField = 2;
+  repeated SuperSubField1 arr_field = 2;
   map<string, SuperSubField1> mapField = 3;
   SuperSubField1 subMsg = 4;
 

@@ -19,7 +19,7 @@ RSpec.describe 'decoding a superset of fields via json' do
       Testing::Examples::ExtraFields::Superset.new(
         field1: 'abc',
         field2: 'def',
-        arrField: [superset_subobject],
+        arr_field: [superset_subobject],
         mapField: { 'abc' => superset_subobject },
         subMsg: superset_subobject,
         foo: %w[1 2 3],
@@ -44,7 +44,7 @@ RSpec.describe 'decoding a superset of fields via json' do
       )
     ).to eq Testing::Examples::ExtraFields::Subset.new(
       field1: 'abc',
-      arrField: [subset_subobject],
+      arr_field: [subset_subobject],
       mapField: { 'abc' => subset_subobject },
       subMsg: subset_subobject,
       foo: %w[1 2 3],

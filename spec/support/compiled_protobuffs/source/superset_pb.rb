@@ -15,7 +15,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
   end
   add_message 'testing.examples.extra_fields.Subset' do
     optional :field1, :string, 1
-    repeated :arrField, :message, 2, 'testing.examples.extra_fields.SubField1'
+    repeated :arr_field, :message, 2, 'testing.examples.extra_fields.SubField1'
     map :mapField, :string, :message, 3, 'testing.examples.extra_fields.SubField1'
     optional :subMsg, :message, 4, 'testing.examples.extra_fields.SubField1'
     repeated :foo, :string, 5
@@ -23,7 +23,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
   end
   add_message 'testing.examples.extra_fields.Superset' do
     optional :field1, :string, 1
-    repeated :arrField, :message, 2, 'testing.examples.extra_fields.SuperSubField1'
+    repeated :arr_field, :message, 2, 'testing.examples.extra_fields.SuperSubField1'
     map :mapField, :string, :message, 3, 'testing.examples.extra_fields.SuperSubField1'
     optional :subMsg, :message, 4, 'testing.examples.extra_fields.SuperSubField1'
     repeated :foo, :string, 5
