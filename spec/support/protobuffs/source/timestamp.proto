@@ -6,10 +6,8 @@ package testing.examples.timestamp;
 
 message SubTs {
   google.protobuf.Timestamp ts = 2;
+  google.protobuf.Timestamp ts_one = 3;
+  google.protobuf.Timestamp tsTwo = 4;
 }
 
-message MsgWithSubTs {
-  google.protobuf.Timestamp ts = 1;
-  SubTs sub_ts = 2;
-}
 

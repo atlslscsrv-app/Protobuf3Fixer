@@ -7,10 +7,8 @@ require 'google/protobuf/timestamp_pb'
 Google::Protobuf::DescriptorPool.generated_pool.build do
   add_message "testing.examples.timestamp.SubTs" do
     optional :ts, :message, 2, "google.protobuf.Timestamp"
-  end
-  add_message "testing.examples.timestamp.MsgWithSubTs" do
-    optional :ts, :message, 1, "google.protobuf.Timestamp"
-    optional :sub_ts, :message, 2, "testing.examples.timestamp.SubTs"
+    optional :ts_one, :message, 3, "google.protobuf.Timestamp"
+    optional :tsTwo, :message, 4, "google.protobuf.Timestamp"
   end
 end
 
@@ -18,7 +16,6 @@ module Testing
   module Examples
     module Timestamp
       SubTs = Google::Protobuf::DescriptorPool.generated_pool.lookup("testing.examples.timestamp.SubTs").msgclass
-      MsgWithSubTs = Google::Protobuf::DescriptorPool.generated_pool.lookup("testing.examples.timestamp.MsgWithSubTs").msgclass
     end
   end
 end

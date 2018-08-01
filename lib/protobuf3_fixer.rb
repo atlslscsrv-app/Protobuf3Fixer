@@ -51,7 +51,7 @@ module Protobuf3Fixer
       reflector = reflect_on(klass)
 
       data.each_with_object({}) do |(k, v), hsh|
-        klass = reflector.subklass_for(k)
+        klass = reflector.subklass_for(k) || reflector.subklass_for(rubyized_field_name(k))
         hsh[k] = if klass == Google::Protobuf::Timestamp
                    Time.at(v['seconds'], (v['nanos'] || 0) / 10**6).utc.to_datetime.rfc3339
                  else
