@@ -16,12 +16,33 @@ module Protobuf3Fixer
     end
 
     def encode_json(instance)
+      fixed_transmission_hash(instance).to_json
+    end
+
+    def decode_json(klass, json)
+      build_from_hash(klass, JSON.parse(json), clean: true)
+    end
+
+    def fixed_transmission_hash(instance)
       generated_json_hash = JSON.parse(instance.class.encode_json(instance))
 
       clean_encoded_json_for_klass(
         generated_json_hash,
         instance.class
-      ).to_json
+      )
+    end
+
+    def build_from_hash(klass, hash_data, clean: false)
+      cleaned_obj = clean_json_data_for_klass(klass, deep_stringify_keys(hash_data), clean: clean)
+      klass.decode_json(cleaned_obj.to_json)
+    end
+
+    private
+
+    def deep_stringify_keys(hash_data)
+      hash_data.each_with_object({}) do |(k, v), hsh|
+        hsh[k.to_s] = v.is_a?(Hash) ? deep_stringify_keys(v) : v
+      end
     end
 
     def clean_encoded_json_for_klass(data, klass)
@@ -38,14 +59,8 @@ module Protobuf3Fixer
       end
     end
 
-    def decode_json(klass, json)
-      parsed_json = JSON.parse(json)
-      cleaned_obj = clean_json_data_for_klass(klass, parsed_json)
-      klass.decode_json(cleaned_obj.to_json)
-    end
-
     def rework_for_well_known_types(klass, data)
-      if klass == Google::Protobuf::Timestamp
+      if klass == Google::Protobuf::Timestamp && data.is_a?(String)
         time = DateTime.rfc3339(data).to_time
         { 'seconds' => time.to_i, 'nanos' => time.nsec }
       else
@@ -53,13 +68,13 @@ module Protobuf3Fixer
       end
     end
 
-    def clean_json_data_for_klass(klass, data)
+    def clean_json_data_for_klass(klass, data, clean: true)
       data = rework_for_well_known_types(klass, data)
       return data unless data.is_a?(Hash)
       reflector = reflect_on(klass)
 
       # Remove unknown fields
-      known_fields = prune_and_organize_fields(reflector, data)
+      known_fields = prune_and_organize_fields(reflector, data, clean: clean)
 
       final_data = {}
 
@@ -97,7 +112,7 @@ module Protobuf3Fixer
       end
     end
 
-    def prune_and_organize_fields(reflector, data)
+    def prune_and_organize_fields(reflector, data, clean: true)
       data.each_with_object({}) do |(k, v), fields|
         json_field_name = k
         local_field_name = if reflector.field_names.include?(rubyized_field_name(k))
@@ -106,7 +121,9 @@ module Protobuf3Fixer
                              k
                            end
 
-        next unless local_field_name
+        next if clean && !local_field_name
+
+        local_field_name ||= json_field_name
 
         fields[[json_field_name, local_field_name]] = v
       end

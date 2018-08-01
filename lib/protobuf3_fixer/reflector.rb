@@ -26,7 +26,7 @@ module Protobuf3Fixer
     end
 
     def subklass_for(field_name)
-      field_info[field_name][:klass]
+      field_info[field_name] && field_info[field_name][:klass]
     end
 
     def reflect_on_field(desc)
