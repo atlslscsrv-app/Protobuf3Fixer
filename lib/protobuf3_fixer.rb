@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
-require 'protobuf3_fixer/version'
-require 'protobuf3_fixer/reflector'
 require 'json'
 require 'date'
+require 'google/protobuf/well_known_types'
+
+require 'protobuf3_fixer/version'
+require 'protobuf3_fixer/reflector'
 
 module Protobuf3Fixer
   class << self
