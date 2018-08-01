@@ -55,7 +55,6 @@ module Protobuf3Fixer
         hsh[k] = if klass == Google::Protobuf::Timestamp
                    Time.at(v['seconds'], (v['nanos'] || 0) / 10**6).utc.to_datetime.rfc3339
                  else
-                   puts "In else for #{k}"
                    v
                  end
       end
