@@ -8,6 +8,11 @@ message SubTs {
   google.protobuf.Timestamp ts = 2;
   google.protobuf.Timestamp ts_one = 3;
   google.protobuf.Timestamp tsTwo = 4;
+  repeated google.protobuf.Timestamp foo = 5;
+  map<string, google.protobuf.Timestamp> bar = 6;
 }
 
+message ParentTs {
+  SubTs abc = 1;
+}
 

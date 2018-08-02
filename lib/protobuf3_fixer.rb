@@ -6,6 +6,7 @@ require 'google/protobuf/well_known_types'
 
 require 'protobuf3_fixer/version'
 require 'protobuf3_fixer/reflector'
+require 'protobuf3_fixer/encoder'
 
 module Protobuf3Fixer
   class << self
@@ -28,10 +29,10 @@ module Protobuf3Fixer
     def fixed_transmission_hash(instance)
       generated_json_hash = JSON.parse(instance.class.encode_json(instance))
 
-      clean_encoded_json_for_klass(
-        generated_json_hash,
-        instance.class
-      )
+      Protobuf3Fixer::Encoder.new(
+        instance.class,
+        generated_json_hash
+      ).reencoded_hash
     end
 
     def build_from_hash(klass, hash_data, clean: false)
@@ -44,19 +45,6 @@ module Protobuf3Fixer
     def deep_stringify_keys(hash_data)
       hash_data.each_with_object({}) do |(k, v), hsh|
         hsh[k.to_s] = v.is_a?(Hash) ? deep_stringify_keys(v) : v
-      end
-    end
-
-    def clean_encoded_json_for_klass(data, klass)
-      reflector = reflect_on(klass)
-
-      data.each_with_object({}) do |(k, v), hsh|
-        klass = reflector.subklass_for(k) || reflector.subklass_for(rubyized_field_name(k))
-        hsh[k] = if klass == Google::Protobuf::Timestamp
-                   Time.at(v['seconds'], (v['nanos'] || 0) / 10**6).utc.to_datetime.rfc3339
-                 else
-                   v
-                 end
       end
     end
 
