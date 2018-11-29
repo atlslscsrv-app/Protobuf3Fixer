@@ -22,7 +22,7 @@ RSpec.describe 'creating a PB from a hash' do
     expect do
       Protobuf3Fixer.build_from_hash(
         Testing::Examples::Timestamp::SubTs,
-        ts: { seconds: 10 }, foo: 'bar'
+        ts: { seconds: 10 }, do_not_use_this_name: 'bar'
       )
     end.to raise_error Google::Protobuf::ParseError
   end

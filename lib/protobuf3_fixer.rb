@@ -7,6 +7,7 @@ require 'google/protobuf/well_known_types'
 require 'protobuf3_fixer/version'
 require 'protobuf3_fixer/reflector'
 require 'protobuf3_fixer/encoder'
+require 'protobuf3_fixer/generation_helpers'
 
 module Protobuf3Fixer
   class << self
@@ -18,16 +19,16 @@ module Protobuf3Fixer
       @reflectors[klass]
     end
 
-    def encode_json(instance)
-      fixed_transmission_hash(instance).to_json
+    def encode_json(instance, options = {})
+      fixed_transmission_hash(instance, options).to_json
     end
 
     def decode_json(klass, json)
       build_from_hash(klass, JSON.parse(json), clean: true)
     end
 
-    def fixed_transmission_hash(instance)
-      generated_json_hash = JSON.parse(instance.class.encode_json(instance))
+    def fixed_transmission_hash(instance, options = {})
+      generated_json_hash = JSON.parse(instance.class.encode_json(instance, options))
 
       Protobuf3Fixer::Encoder.new(
         instance.class,
@@ -60,6 +61,7 @@ module Protobuf3Fixer
     def clean_json_data_for_klass(klass, data, clean: true)
       data = rework_for_well_known_types(klass, data)
       return data unless data.is_a?(Hash)
+
       reflector = reflect_on(klass)
 
       # Remove unknown fields
