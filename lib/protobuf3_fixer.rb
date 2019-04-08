@@ -50,12 +50,7 @@ module Protobuf3Fixer
     end
 
     def rework_for_well_known_types(klass, data)
-      if klass == Google::Protobuf::Timestamp && data.is_a?(String)
-        time = DateTime.rfc3339(data).to_time
-        { 'seconds' => time.to_i, 'nanos' => time.nsec }
-      else
-        data
-      end
+      data
     end
 
     def clean_json_data_for_klass(klass, data, clean: true)
