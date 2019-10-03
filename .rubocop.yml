@@ -34,7 +34,7 @@ Naming/UncommunicativeMethodParamName:
 Layout/MultilineMethodCallIndentation:
   Enabled: true
 
-ParallelAssignment:
+Style/ParallelAssignment:
   Enabled: true
 
 Metrics/MethodLength:
