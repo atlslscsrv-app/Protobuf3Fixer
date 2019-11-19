@@ -3,6 +3,7 @@
 require 'json'
 require 'date'
 require 'google/protobuf/well_known_types'
+require 'google/type/date_pb'
 
 require 'protobuf3_fixer/version'
 require 'protobuf3_fixer/reflector'
