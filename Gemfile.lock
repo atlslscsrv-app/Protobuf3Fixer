@@ -59,6 +59,7 @@ GEM
 PLATFORMS
   ruby
   x86_64-darwin-17
+  x86_64-darwin-18
 
 DEPENDENCIES
   bundler (~> 1.16)
@@ -71,4 +72,4 @@ DEPENDENCIES
   rubocop
 
 BUNDLED WITH
-   1.17.2
+   1.17.3
